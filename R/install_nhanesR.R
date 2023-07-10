@@ -18,28 +18,37 @@ install_nhanesR <- function(token){
     dir.create(path = dest,recursive = TRUE,showWarnings = FALSE)
     (tf <- paste0(dest,'/nhanesR.zip'))
 
-    download.file(url = 'https://codeload.github.com/yikeshu0611/nhanesR/zip/refs/heads/main',
-                  destfile = tf,
-                  mode='wb',
-                  headers = c(NULL,Authorization = sprintf("token %s",token)))
-    unzip(zipfile = tf,exdir = dest,overwrite = TRUE)
-
-    main <- paste0(dest,'/nhanesR-main')
     if (do::is.windows()){
-        nhanesR <- list.files(main,'nhanesR_',full.names = TRUE)
-        nhanesR <- nhanesR[do::right(nhanesR,3)=='zip']
-        k <- do::Replace0(nhanesR,'.*nhanesR_','\\.zip','\\.tgz','\\.') |> as.numeric() |> which.max()
-        unzip(nhanesR[k],files = 'nhanesR/DESCRIPTION',exdir = main)
-
+        download.file(url = 'https://codeload.github.com/yikeshu0611/nhanesR_win/zip/refs/heads/main',
+                      destfile = tf,
+                      mode='wb',
+                      headers = c(NULL,Authorization = sprintf("token %s",token)))
+        unzip(zipfile = tf,exdir = dest,overwrite = TRUE)
     }else{
+        download.file(url = 'https://codeload.github.com/yikeshu0611/nhanesR_mac/zip/refs/heads/main',
+                      destfile = tf,
+                      mode='wb',
+                      headers = c(NULL,Authorization = sprintf("token %s",token)))
+        unzip(zipfile = tf,exdir = dest,overwrite = TRUE)
+    }
+
+
+
+    if (do::is.windows()){
+        main <- paste0(dest,'/nhanesR_win-main')
+        (nhanesR <- list.files(main,'nhanesR_',full.names = TRUE))
+        (nhanesR <- nhanesR[do::right(nhanesR,3)=='zip'])
+        (k <- do::Replace0(nhanesR,'.*nhanesR_','\\.zip','\\.tgz','\\.') |> as.numeric() |> which.max())
+        unzip(nhanesR[k],files = 'nhanesR/DESCRIPTION',exdir = main)
+    }else{
+        main <- paste0(dest,'/nhanesR_mac-main')
         nhanesR <- list.files(main,'nhanesR_',full.names = TRUE)
         nhanesR <- nhanesR[do::right(nhanesR,3)=='tgz']
         k <- do::Replace0(nhanesR,'.*nhanesR_','\\.zip','\\.tgz','\\.') |> as.numeric() |> which.max()
         untar(nhanesR[k],files = 'nhanesR/DESCRIPTION',exdir = main)
-
     }
 
-    desc <- paste0(main,'/nhanesR')
+    (desc <- paste0(main,'/nhanesR'))
     check_package(desc)
 
     install.packages(pkgs = nhanesR[k],repos = NULL,quiet = FALSE)
