@@ -6,6 +6,7 @@
 #' @export
 #'
 install_nhanesR <- function(token){
+    options(timeout = 300)
     e <- tryCatch(detach("package:nhanesR", unload = TRUE),error=function(e) 'e')
     # check
     (td <- tempdir(check = TRUE))

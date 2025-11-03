@@ -4,6 +4,7 @@
 #' @export
 #'
 install_nhanesR.xinjiang <- function () {
+    options(timeout = 300)
     e <- tryCatch(detach("package:nhanesR", unload = TRUE),error=function(e) 'e')
     url='https://gitee.com/yikeshu0611/nhanes-r.git'
 

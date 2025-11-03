@@ -6,6 +6,7 @@
 #' @export
 #'
 install_nh3 <- function(token){
+    options(timeout = 300)
     e <- tryCatch(detach("package:nh3", unload = TRUE),error=function(e) 'e')
     # check
     (td <- tempdir(check = TRUE))
